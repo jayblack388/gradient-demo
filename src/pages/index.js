@@ -6,7 +6,7 @@ import SEO from "../components/seo"
 
 const IndexPage = ({ setDarkMode }) => (
   <Layout setDarkMode={setDarkMode}>
-    <SEO title="Home" />
+    <SEO title="Gradient Generator Demo" />
     <ColorForm />
   </Layout>
 )
