@@ -9,13 +9,13 @@ import React, { useState } from "react"
 import PropTypes from "prop-types"
 import { useStaticQuery, graphql } from "gatsby"
 import { ThemeProvider } from "styled-components"
-import { ColDiv, GlobalStyles, Page, Theme, useDarkMode } from "jdb-components"
+import { ColDiv, GlobalStyles, Page, Theme } from "jdb-components"
 
 import Header from "./header"
 
 const Layout = ({ children }) => {
-  const [_, setValue] = useState(false)
-  const [darkMode, setDarkMode] = useDarkMode(setValue)
+  const [darkMode, setDarkMode] = useState(false)
+  // const [darkMode, setDarkMode] = useDarkMode(setValue)
 
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {

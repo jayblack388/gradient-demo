@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react"
 import { ThemeContext } from "styled-components"
-import { Button, Field, RowDiv, ColDiv } from "jdb-components"
+import { Button, Field, RowDiv } from "jdb-components"
 import { generateGradientCSSString } from "gradient-steps-string-generator"
 
 const GradientDemo = ({ colors, stops }) => {
