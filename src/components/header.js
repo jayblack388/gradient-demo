@@ -26,7 +26,13 @@ const Header = ({ setDarkMode, siteTitle }) => {
       colors={colors}
       height="3.5rem"
       isGatsby
-      links={[{ name: "My Portfolio", path: "https://johnblackwell.dev" }]}
+      links={[
+        { name: "My Portfolio", path: "https://johnblackwell.dev" },
+        {
+          name: "Github Repo",
+          path: "https://github.com/jayblack388/gradient-generator",
+        },
+      ]}
       menuText={menuText}
       setDarkMode={setDarkMode}
       width="40%"
