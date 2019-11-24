@@ -7382,10 +7382,10 @@ iterall@^1.2.2:
   resolved "https://registry.yarnpkg.com/iterall/-/iterall-1.2.2.tgz#92d70deb8028e0c39ff3164fdbf4d8b088130cd7"
   integrity sha512-yynBb1g+RFUPY64fTrFv7nsjRrENBQJaX2UL+2Szc9REFrSNm1rpSXHGzhmAy7a9uv3vlvgBlXnf9RqmPH1/DA==
 
-jdb-components@^0.1.49:
-  version "0.1.49"
-  resolved "https://registry.yarnpkg.com/jdb-components/-/jdb-components-0.1.49.tgz#8a665f82db323e1fb85e8d542a8722d2cf19e7ee"
-  integrity sha512-NrQQ6EJ/FsUjUdOu9ROt85FiQaQGzeGo6bz0QMs8JAWTup4iqFlmG8/9kx1qBbt9CzWBqMdoObV+trL+4YA8Ww==
+jdb-components@^0.1.52:
+  version "0.1.52"
+  resolved "https://registry.yarnpkg.com/jdb-components/-/jdb-components-0.1.52.tgz#abbe3e8949a5af4f9afa2444917800ae51246252"
+  integrity sha512-90kCFxoeBCYTJ+qKiattRhJT0gqSyHUUZxxsNqQUgtCF0gAArSD62/GgiQ+83ew7g21f3Fj9/4p9N8lMFsYOgA==
   dependencies:
     "@reach/router" "^1.2.1"
     "@types/color" "^3.0.0"

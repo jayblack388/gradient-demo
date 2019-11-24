@@ -20,7 +20,7 @@ const CopyButton = ({ onClick, success }) => {
   )
 }
 
-const GradientDemo = ({ colors, stops }) => {
+const GradientDemo = ({ colors, direction, percents, stops }) => {
   const stringRef = useRef()
   const [copySuccess, setCopySuccess] = useState(false)
   const {
@@ -28,12 +28,16 @@ const GradientDemo = ({ colors, stops }) => {
     mode: { darkMode },
   } = useContext(ThemeContext)
   const [background, setBackground] = useState("#FFF")
+  const formattedPercents = Object.values(percents).map(val => val ? `${val}%` : undefined)
   useEffect(() => {
     const colorValues = Object.values(colors).map(val => val) || []
-    const gradientString = generateGradientCSSString(colorValues, stops)
+    const gradientString = generateGradientCSSString(colorValues, stops, {
+      customStepDirection: direction,
+      customStepStops: formattedPercents,
+    })
     setBackground(gradientString)
     setCopySuccess(false)
-  }, [colors, stops])
+  }, [colors, stops, formattedPercents, direction])
 
   useEffect(() => {
     if (copySuccess) {
@@ -48,14 +52,13 @@ const GradientDemo = ({ colors, stops }) => {
     navigator.permissions
       .query({ name: "clipboard-write" })
       .then(function(result) {
-        if (result.state == "granted" || result.state == "prompt") {
+        if (result.state === "granted" || result.state === "prompt") {
           navigator.clipboard.writeText(background).then(
             function() {
-              /* clipboard successfully set */
               setCopySuccess(true)
             },
-            function() {
-              /* clipboard write failed */
+            function(e) {
+              console.log(e)
             }
           )
         }
@@ -86,8 +89,10 @@ const GradientDemo = ({ colors, stops }) => {
           background: darkMode
             ? themeColors.light.regular
             : themeColors.dark.regular,
+          overflow: "auto",
         }}
         width="60%"
+        height="10rem"
         align="center"
       >
         <BlockSpan
@@ -113,6 +118,11 @@ const ColorForm = () => {
     color_1: "#000000",
     color_2: "#FFFFFF",
   })
+  const [colorPercents, setColorPercents] = useState({
+    color_1_percent: undefined,
+    color_2_percent: undefined,
+  })
+  const [direction, setDirection] = useState("45deg")
   const [stops, setStops] = useState(10)
   const addField = () => {
     setColorFields(prevValues => {
@@ -121,46 +131,76 @@ const ColorForm = () => {
         .slice(2, 8)
         .toUpperCase()}`
       const currentLength = Object.keys(prevValues).length
-      if (currentLength > 5) {
-        return prevValues
-      }
       return { ...prevValues, [`color_${currentLength + 1}`]: newColor }
+    })
+    setColorPercents(prevValues => {
+      const currentLength = Object.keys(prevValues).length
+      return {
+        ...prevValues,
+        [`color_${currentLength + 1}_percent`]: undefined,
+      }
     })
   }
   return (
     <>
       <RowDiv
-        p="0 25%"
-        style={{ flexWrap: "wrap" }}
+        p="1rem"
+        style={{ flexWrap: "wrap", overflow: "auto" }}
         justify="space-between"
-        width="100%"
+        width="75%"
+        height="22rem"
       >
         {Object.entries(colorFields).map((colorTuple, i) => (
-          <Field
-            type="color"
-            defaultValue={colorTuple[1]}
-            fieldName={colorTuple[0]}
-            key={colorTuple[0]}
-            overrideOnChange={e => {
-              setColorFields({
-                ...colorFields,
-                [`${colorTuple[0]}`]: e.target.value,
-              })
-            }}
-            overrideValue={colorTuple[1]}
-          />
+          <ColDiv>
+            <Field
+              type="color"
+              defaultValue={colorTuple[1]}
+              fieldName={colorTuple[0]}
+              key={colorTuple[0]}
+              overrideOnChange={e => {
+                setColorFields({
+                  ...colorFields,
+                  [`${colorTuple[0]}`]: e.target.value,
+                })
+              }}
+              overrideValue={colorTuple[1]}
+              p="0"
+              m="0"
+            />
+            <Field
+              type="number"
+              fieldName={`${colorTuple[0]}_percent`}
+              value={colorPercents[`${colorTuple[0]}_percent`]}
+              onChange={e => {
+                setColorPercents({
+                  ...colorPercents,
+                  [`${colorTuple[0]}_percent`]: e.target.value,
+                })
+              }}
+              p="0"
+              m="0"
+            />
+          </ColDiv>
         ))}
       </RowDiv>
-      <RowDiv p="0 25%" justify="space-between" height="10%" width="100%">
+      <RowDiv p="0 25%" justify="space-between" width="100%">
         <Field
           type="number"
           fieldName="stops"
           value={stops}
           onChange={e => setStops(e.target.value)}
         />
+        <Field
+          type="text"
+          fieldName="step_direction"
+          value={direction}
+          onChange={e => setDirection(e.target.value)}
+        />
+      </RowDiv>
+      <RowDiv p="0 25%" justify="space-between" height="10%" width="100%">
         <Button
           color="successSecondary"
-          disabled={Object.keys(colorFields).length > 5}
+          disabled={Object.keys(colorFields).length > 30}
           message={
             Object.keys(colorFields).length === 0
               ? "Add a Color"
@@ -170,8 +210,26 @@ const ColorForm = () => {
             addField()
           }}
         />
+        <Button
+          color="secondaryPrimary"
+          disabled={Object.keys(colorFields).length === 2}
+          message="Reset"
+          onClick={() => {
+            setColorFields({
+              color_1: "#000000",
+              color_2: "#FFFFFF",
+            })
+            setStops(10)
+            setDirection("45deg")
+          }}
+        />
       </RowDiv>
-      <GradientDemo colors={colorFields} stops={stops} />
+      <GradientDemo
+        direction={direction}
+        percents={colorPercents}
+        colors={colorFields}
+        stops={stops}
+      />
     </>
   )
 }
